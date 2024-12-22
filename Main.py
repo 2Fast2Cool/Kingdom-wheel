@@ -7,8 +7,9 @@ from PIL import Image, ImageTk
 # Path to the images folder
 image_folder = "images"
 
-# Get list of image filenames in the folder
-all_images = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+# Get list of image filenames in the folder (including .webp)
+valid_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp')
+all_images = [f for f in os.listdir(image_folder) if f.lower().endswith(valid_extensions)]
 
 # List to keep track of disabled images
 disabled_images = []

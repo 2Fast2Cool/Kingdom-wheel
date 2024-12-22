@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Image Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #image-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+        #random-image {
+            max-width: 300px;
+            max-height: 300px;
+            margin-bottom: 20px;
+        }
+        select, button {
+            margin: 10px;
+        }
+        #disabled-images-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Image Selector</h1>
+
+    <!-- Display random image -->
+    <div id="image-container">
+        <img id="random-image" src="" alt="Random Image">
+    </div>
+
+    <button onclick="pickRandomImage()">Pick Random Image</button>
+
+    <h3>Disable/Enable Image</h3>
+    <label for="image-selector">Select Image: </label>
+    <select id="image-selector">
+        <!-- Options will be populated by JavaScript -->
+    </select>
+
+    <button onclick="toggleImageStatus()">Disable/Enable Image</button>
+
+    <h3>Disabled Images</h3>
+    <pre id="disabled-images-list">No images disabled yet.</pre>
+
+    <script>
+        // Image files (This will be dynamically populated if you fetch the file list from a server)
+        const allImages = [
+            "image1.jpg",
+            "image2.webp",
+            "image3.jpg",
+            "image4.png",
+            "image5.gif",
+            "image6.bmp",
+            "image7.webp"
+        ];
+
+        let disabledImages = [];
+
+        // Initialize the image selector dropdown
+        const imageSelector = document.getElementById("image-selector");
+        const randomImageElement = document.getElementById("random-image");
+        const disabledImagesListElement = document.getElementById("disabled-images-list");
+
+        // Populate the dropdown with all images
+        function populateImageSelector() {
+            imageSelector.innerHTML = '';
+            allImages.forEach(image => {
+                const option = document.createElement("option");
+                option.value = image;
+                option.textContent = image;
+                imageSelector.appendChild(option);
+            });
+        }
+
+        // Function to pick and display a random image from enabled ones
+        function pickRandomImage() {
+            const enabledImages = allImages.filter(image => !disabledImages.includes(image));
+            if (enabledImages.length === 0) {
+                alert("No images left to choose from.");
+                return;
+            }
+            const randomIndex = Math.floor(Math.random() * enabledImages.length);
+            const randomImage = enabledImages[randomIndex];
+            randomImageElement.src = "images/" + randomImage;  // Adjust the path if needed
+        }
+
+        // Function to toggle the disabled status of an image
+        function toggleImageStatus() {
+            const selectedImage = imageSelector.value;
+            if (disabledImages.includes(selectedImage)) {
+                // Enable the image
+                disabledImages = disabledImages.filter(image => image !== selectedImage);
+            } else {
+                // Disable the image
+                disabledImages.push(selectedImage);
+            }
+            updateDisabledImagesList();
+        }
+
+        // Function to update the list of disabled images
+        function updateDisabledImagesList() {
+            if (disabledImages.length === 0) {
+                disabledImagesListElement.textContent = "No images disabled yet.";
+            } else {
+                disabledImagesListElement.textContent = disabledImages.join("\n");
+            }
+        }
+
+        // Initialize the page
+        populateImageSelector();
+
+    </script>
+</body>
+</html>
